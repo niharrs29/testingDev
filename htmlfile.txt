@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<<<<<<< HEAD
+   <center><h2>Welcome to Prodevans, How are You all ?</h2></center> 
+=======
+   <center><h2>Hello Nihar</h2></center> 
+>>>>>>> e8175bf6b322c890ebcf63d43c0f97234fee3c52
+</body>
+</html>
+
+
+
+cd /var/lib/jenkins/workspace/git-trigger
+
+docker build . -t myapp
+
+docker tag myapp niharrs29/myapp
+
+docker login -u niharrs29 -p Abcd@54321
+
+docker push niharrs29/myapp
+
+
+
+--------
+
+pipeline {
+    agent any
+ 
+    environment {
+        // Define environment variables
+        DOCKERHUB_USERNAME = credentials('niharrs29')
+        DOCKERHUB_PASSWORD = credentials('Abcd@54321')
+        CUSTOM_TAG = "${new Date().format("yyyyMMddHHmmss")}"
+    }
+ 
+    stages {
+        stage('Build and Push Image') {
+            steps {
+                script {
+                    def dockerImage = docker.build("niharrs29/myapp:${CUSTOM_TAG}")
+                    dockerImage.push()
+                }
+            }
+        }
+    }
+}
+
+-------------------------
+
+pipeline {
+    agent any
+ 
+    environment {
+        // Define environment variables
+        DOCKERHUB_USERNAME = credentials('niharrs29')
+        DOCKERHUB_PASSWORD = credentials('Abcd@54321')
+        CUSTOM_TAG = "${env.BUILD_TAG}-${new Date().format("yyyyMMddHHmmss")}"
+    }
+ 
+    stages {
+        stage('Build and Push Image') {
+            steps {
+                script {
+                    def dockerImage = docker.build("niharrs29/myapp:${CUSTOM_TAG}")
+                    dockerImage.push()
+                }
+            }
+        }
+    }
+}
+
+
+------------------
+
+pipeline {
+		agent {
+				label {
+							label "built-in"
+				
+				}
+		}
+		
+		environment {
+						
+						url = "https://github.com/niharrs29/testingDev.git"
+		
+		}
+		stages {
+			stage('Build and Push Image') {
+		
+		
+		
+		
+		
+-------------------------------------------------		
+!/bin/bash  
+  
+image="niharrs29/myapp"  
+  
+#get timestamp for the tag  
+timestamp=$(date +%Y%m%d%H%M%S)  
+  
+tag=$image:$timestamp  
+latest=$image:latest  
+  
+#build image  
+sudo docker build -t $tag .  
+  
+#push to dockerhub  
+sudo docker login  
+#sudo docker login -u username -p password  
+sudo docker push $image  
+  
+#remove dangling images  
+sudo docker system prune -f  
+------------------------------------------------
+
+
+echo -n "$(date +'%Y-%m-%d_%H-%M')"
+
+
+cd /var/lib/jenkins/workspace/git-trigger
+
+docker build . -t myapp
+
+docker tag myapp niharrs29/myapp
+
+docker login -u niharrs29 -p Abcd@54321
+
+docker push niharrs29/myapp
+
+
+!/bin/bash  
+
+cd /var/lib/jenkins/workspace/git-trigger
+  
+image="niharrs29/myapp"  
+  
+#get timestamp for the tag  
+timestamp=$(date +%Y%m%d%H%M%S)  
+  
+tag=$image:$timestamp  
+latest=$image:latest  
+  
+#build image  
+docker build -t $tag .  
+  
+#sudo docker login -u username -p password 
+docker login -u niharrs29 -p Abcd@54321
+
+#push to dockerhub  
+sudo docker push $tag  
+
+
+  
+#remove dangling images  
+sudo docker system prune -f  
+
